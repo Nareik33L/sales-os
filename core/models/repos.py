@@ -8,9 +8,11 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from collections.abc import Mapping
 from enum import Enum
 from typing import Any
 
+from core.models.action import assign_action_tier
 from core.models.common import (
     fetch_all,
     fetch_one,
@@ -473,8 +475,19 @@ def list_actions(
 
 
 def upsert_action(
-    conn: sqlite3.Connection, action: Action, *, now: str | None = None
+    conn: sqlite3.Connection,
+    action: Action,
+    *,
+    now: str | None = None,
+    tier_by_type: Mapping[str, int] | None = None,
 ) -> Action:
+    """Insert or update an action keyed by id or ``(source, source_id)``.
+
+    ``tier`` is always refreshed from ``type`` via ``priority_weights.yaml``
+    (or the optional ``tier_by_type`` override used in tests). Callers do not
+    need to pass ``tier`` for standard types.
+    """
+    action = assign_action_tier(action, tier_by_type=tier_by_type)
     existing = None
     if "id" in action.model_fields_set:
         existing = get_action(conn, action.id)

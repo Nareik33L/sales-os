@@ -453,6 +453,8 @@ class Action(TableModel):
     title: str
     description: str | None = None
     type: ActionType
+    # Hard sort key (1 deal work, 2 admin, 3 prospecting). upsert_action
+    # always overwrites this from type via action.tier_by_type.
     tier: int = 2
     status: ActionStatus = ActionStatus.OPEN
     source: str
