@@ -1,0 +1,103 @@
+# Deterministic prioritisation — see docs/03-prioritisation.md
+# Every component produces a 0–100 signal; the final score is the weighted sum
+# (weights sum to 1.0 for deals) plus bounded user adjustments. No LLM involved.
+#
+# The Settings page edits this file. Changes are recorded in audit_log
+# (event = CONFIG_CHANGE). The system NEVER changes these values itself; it may
+# only *suggest* a change (docs/03, "Suggested adjustments").
+
+version: 1
+
+deal:
+  weights:
+    deal_value: 0.30           # Strongest signals per spec: value + close urgency
+    close_urgency: 0.30
+    stale_activity: 0.15
+    outstanding_commitment: 0.15
+    meeting_proximity: 0.10
+  # Deal value: log-scaled so a £150k deal does not drown everything else.
+  # signal = 100 * log10(1 + value_gbp) / log10(1 + reference_value_gbp), capped at 100
+  deal_value:
+    reference_value_gbp: 100000
+    min_signal_for_known_value: 10
+  # Close urgency by days until close_date (piecewise linear between points).
+  close_urgency:
+    points:                       # [days_to_close, signal]
+      - [-1, 100]                 # close date passed — also raises a DATA_HYGIENE action
+      - [0, 100]
+      - [3, 95]
+      - [7, 80]
+      - [14, 60]
+      - [30, 35]
+      - [60, 15]
+      - [90, 5]
+    unknown_close_date_signal: 20
+  # Staleness by days since last_activity_at (see definition of activity in docs/03).
+  stale_activity:
+    points:
+      - [0, 0]
+      - [3, 0]
+      - [7, 60]                   # spec threshold: ~7 days without activity needs attention
+      - [14, 100]
+    # Conflict rule: a stale deal that closes far in the future is less urgent.
+    cap_when_close_beyond_days: 60
+    cap_signal: 50
+    unknown_activity_signal: 70
+  outstanding_commitment:
+    user_owes_customer_overdue: 100
+    user_owes_customer_due_within_days: 2
+    user_owes_customer_due_soon: 85
+    user_owes_customer_open: 60
+    customer_owes_user_overdue: 40      # triggers a follow-up action, not a deal alarm
+    none: 0
+  meeting_proximity:
+    today: 100
+    tomorrow: 70
+    within_days: 7
+    within_signal: 40
+    held_yesterday_no_followup: 80     # post-meeting follow-up window
+    none: 0
+
+  attention_thresholds:            # score -> attention_status
+    high: 70
+    medium: 40
+
+  user_adjustments:
+    boost_step_points: 8           # ↑ / ↓ adds/subtracts this many points to the final score
+    max_boost_points: 24           # bounded so overrides cannot silently become the whole model
+    strategic_account_points: 10   # companies.is_strategic = 1 (explicit user flag)
+    pinned_rank_wins: true         # user_pinned_rank forces position regardless of score
+
+action:
+  # Actions inherit the deal score and add their own due-date signal.
+  # tier is a hard sort key before score: 1 deal work, 2 follow-ups/admin, 3 prospecting.
+  weights:
+    inherited_deal_score: 0.6
+    due_date: 0.4
+  due_date:
+    overdue_base: 90
+    overdue_per_day: 2             # +2 per day overdue, capped at 100
+    today: 85
+    tomorrow: 65
+    within_days: 7
+    within_signal: 40
+    no_due_date: 20
+  tier_by_type:
+    COMMITMENT: 1
+    TRANSCRIPT_ACTION: 1
+    EMAIL_FOLLOWUP: 1
+    HUBSPOT_TASK: 1
+    MEETING_PREP: 1
+    MEETING_FOLLOWUP: 1
+    TODO_TASK: 2
+    DATA_HYGIENE: 2
+    REVIEW: 2
+    MANUAL: 2
+    PROSPECTING: 3                 # spec: prospecting always ranks below active deal management
+  # Actions without a deal (general To-Do items) use this as their inherited deal score.
+  no_deal_inherited_score: 30
+
+explanations:
+  # Components contributing at least this many points get a "Why" bullet.
+  min_contribution_for_bullet: 5
+  max_bullets: 4

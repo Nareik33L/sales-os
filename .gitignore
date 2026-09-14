@@ -1,0 +1,34 @@
+# Credentials — never commit
+.env
+.env.*
+!.env.example
+config/*.local.yaml
+*.pem
+*.key
+service_account*.json
+token*.json
+
+# Local data — contains customer information. Only the folder markers are tracked.
+data/**
+!data/**/
+!data/**/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
