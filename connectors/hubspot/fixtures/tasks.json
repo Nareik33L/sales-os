@@ -1,0 +1,41 @@
+{
+  "results": [
+    {
+      "id": "5001",
+      "properties": {
+        "hs_task_subject": "Send revised pricing to Acme",
+        "hs_task_body": "Ada Example asked for the revised quote.",
+        "hs_task_status": "NOT_STARTED",
+        "hs_task_priority": "HIGH",
+        "hs_timestamp": "2026-09-15T17:00:00.000Z",
+        "hs_lastmodifieddate": "2026-09-13T12:00:00.000Z",
+        "hubspot_owner_id": "101"
+      },
+      "associations": {
+        "deals": {
+          "results": [{ "id": "3001", "type": "task_to_deal" }]
+        }
+      },
+      "updatedAt": "2026-09-13T12:00:00.000Z"
+    },
+    {
+      "id": "5002",
+      "properties": {
+        "hs_task_subject": "Log discovery notes",
+        "hs_task_body": "Completed after the 5 Sep call.",
+        "hs_task_status": "COMPLETED",
+        "hs_task_priority": "NONE",
+        "hs_timestamp": "2026-09-04T17:00:00.000Z",
+        "hs_task_completion_date": "2026-09-04T18:00:00.000Z",
+        "hs_lastmodifieddate": "2026-09-04T18:00:00.000Z",
+        "hubspot_owner_id": "101"
+      },
+      "associations": {
+        "deals": {
+          "results": [{ "id": "3001", "type": "task_to_deal" }]
+        }
+      },
+      "updatedAt": "2026-09-04T18:00:00.000Z"
+    }
+  ]
+}

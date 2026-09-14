@@ -1,0 +1,115 @@
+{
+  "results": [
+    {
+      "id": "3001",
+      "properties": {
+        "dealname": "Acme — Xodo Sign",
+        "amount": "75000",
+        "deal_currency_code": "GBP",
+        "dealstage": "presentationscheduled",
+        "pipeline": "default",
+        "closedate": "2026-09-18T00:00:00.000Z",
+        "hubspot_owner_id": "101",
+        "createdate": "2026-06-01T10:00:00.000Z",
+        "hs_lastmodifieddate": "2026-09-13T12:00:00.000Z",
+        "notes_last_updated": "2026-09-14T07:00:00.000Z"
+      },
+      "associations": {
+        "companies": {
+          "results": [{ "id": "1001", "type": "deal_to_company" }]
+        },
+        "contacts": {
+          "results": [{ "id": "2001", "type": "deal_to_contact" }]
+        }
+      },
+      "updatedAt": "2026-09-13T12:00:00.000Z"
+    },
+    {
+      "id": "3002",
+      "properties": {
+        "dealname": "Beta Corp — Xodo Sign",
+        "amount": "42000",
+        "deal_currency_code": "GBP",
+        "dealstage": "decisionmakerboughtin",
+        "pipeline": "default",
+        "closedate": "2026-09-21T00:00:00.000Z",
+        "hubspot_owner_id": "101",
+        "createdate": "2026-07-01T10:00:00.000Z",
+        "hs_lastmodifieddate": "2026-09-12T09:00:00.000Z",
+        "notes_last_updated": "2026-09-12T09:00:00.000Z"
+      },
+      "associations": {
+        "companies": {
+          "results": [{ "id": "1002", "type": "deal_to_company" }]
+        },
+        "contacts": {
+          "results": [{ "id": "2002", "type": "deal_to_contact" }]
+        }
+      },
+      "updatedAt": "2026-09-12T09:00:00.000Z"
+    },
+    {
+      "id": "3003",
+      "properties": {
+        "dealname": "Acme — ancient closed won",
+        "amount": "5000",
+        "deal_currency_code": "GBP",
+        "dealstage": "closedwon",
+        "pipeline": "default",
+        "closedate": "2025-01-15T00:00:00.000Z",
+        "hubspot_owner_id": "101",
+        "createdate": "2024-11-01T10:00:00.000Z",
+        "hs_lastmodifieddate": "2026-09-01T10:00:00.000Z",
+        "notes_last_updated": "2026-09-01T10:00:00.000Z"
+      },
+      "associations": {
+        "companies": {
+          "results": [{ "id": "1001", "type": "deal_to_company" }]
+        }
+      },
+      "updatedAt": "2026-09-01T10:00:00.000Z"
+    },
+    {
+      "id": "3004",
+      "properties": {
+        "dealname": "Beta Corp — closed lost",
+        "amount": "8000",
+        "deal_currency_code": "GBP",
+        "dealstage": "closedlost",
+        "pipeline": "default",
+        "closedate": "2026-08-01T00:00:00.000Z",
+        "hubspot_owner_id": "101",
+        "createdate": "2026-05-01T10:00:00.000Z",
+        "hs_lastmodifieddate": "2026-08-02T10:00:00.000Z",
+        "notes_last_updated": "2026-08-02T10:00:00.000Z"
+      },
+      "associations": {
+        "companies": {
+          "results": [{ "id": "1002", "type": "deal_to_company" }]
+        }
+      },
+      "updatedAt": "2026-08-02T10:00:00.000Z"
+    },
+    {
+      "id": "3005",
+      "properties": {
+        "dealname": "Gamma Ltd — Xodo Sign",
+        "amount": "10000",
+        "deal_currency_code": "USD",
+        "dealstage": "qualifiedtobuy",
+        "pipeline": "default",
+        "closedate": "2026-10-15T00:00:00.000Z",
+        "hubspot_owner_id": "101",
+        "createdate": "2026-08-01T10:00:00.000Z",
+        "hs_lastmodifieddate": "2026-09-10T08:00:00.000Z",
+        "notes_last_updated": "2026-09-10T08:00:00.000Z"
+      },
+      "associations": {
+        "companies": {
+          "results": [{ "id": "1003", "type": "deal_to_company" }]
+        }
+      },
+      "updatedAt": "2026-09-10T08:00:00.000Z"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "results": [
+    {
+      "id": "101",
+      "email": "sam.taylor@salesos-example.test",
+      "firstName": "Sam",
+      "lastName": "Taylor",
+      "archived": false
+    }
+  ]
+}

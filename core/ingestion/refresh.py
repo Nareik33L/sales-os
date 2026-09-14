@@ -4,12 +4,13 @@ Loads enabled connectors from `config/sources.yaml` (Tier 1 first), runs each
 `connector.run(trigger)` in isolation, and continues past connector failures
 when `refresh.continue_on_connector_failure` is true (the default).
 
-Post-connector steps are stubbed until later tickets: inbox, activity dates,
-extraction, prioritisation.
+Post-connector steps after every connector run: activity-date recompute
+(SOS-08), then stubs for inbox, extraction and prioritisation.
 """
 
 from __future__ import annotations
 
+import json
 import logging
 import sqlite3
 from collections.abc import Iterable, Mapping, Sequence
@@ -95,11 +96,16 @@ def build_connectors(
 ) -> list[Connector]:
     """Instantiate registered implementations for enabled sources.
 
-    Sources that are enabled in YAML but have no factory yet (HubSpot lands in
-    SOS-08) are logged and skipped — they do not write SKIPPED `sync_runs` rows
-    so the UI is not spammed before those tickets exist.
+    Sources that are enabled in YAML but have no factory yet are logged and
+    skipped — they do not write SKIPPED `sync_runs` rows.
     """
-    factories = dict(factories) if factories is not None else registered_connectors()
+    if factories is None:
+        from connectors import load_builtin_connectors
+
+        load_builtin_connectors()
+        factories = registered_connectors()
+    else:
+        factories = dict(factories)
     timeout = (config.get("refresh") or {}).get("connector_timeout_seconds")
     built: list[Connector] = []
     for spec in enabled_connector_specs(config):
@@ -129,8 +135,85 @@ def process_inbox_folders(conn: sqlite3.Connection) -> None:
 def recompute_activity_dates(conn: sqlite3.Connection) -> None:
     """Recompute `deals.last_activity_at` from engagements + local evidence.
 
-    TODO(salesos-connector-engineer): SOS-08 HubSpot recomputes this from engagements.
+    Definition: docs/03 §2.3 — HubSpot calls/meetings/notes/emails/completed
+    tasks; local email and transcripts; past meetings. Not open tasks, not
+    future meetings, not ``notes_last_updated``.
     """
+    from core.models import (
+        Deal,
+        MeetingStatus,
+        list_deals,
+        list_evidence,
+        list_meetings,
+        upsert_deal,
+    )
+    from core.models.common import utcnow
+
+    now = utcnow()
+    stamps: dict[str, list[str]] = {}
+
+    def add(deal_id: str | None, ts: str | None) -> None:
+        if deal_id and ts:
+            stamps.setdefault(deal_id, []).append(ts)
+
+    for evidence in list_evidence(conn):
+        if _evidence_counts_as_activity(evidence, now):
+            add(evidence.deal_id, evidence.occurred_at)
+    for meeting in list_meetings(conn):
+        if meeting.status == MeetingStatus.CANCELLED:
+            continue
+        end = meeting.end_at or meeting.start_at
+        if end and end <= now:
+            add(meeting.deal_id, end)
+
+    for deal in list_deals(conn):
+        times = stamps.get(deal.id)
+        if not times:
+            continue
+        latest = max(times)
+        if deal.last_activity_at == latest:
+            continue
+        upsert_deal(
+            conn,
+            Deal(
+                external_id=deal.external_id,
+                source=deal.source,
+                product=deal.product,
+                name=deal.name,
+                last_activity_at=latest,
+            ),
+        )
+
+
+def _evidence_counts_as_activity(evidence: Any, now: str) -> bool:
+    from core.models import EvidenceType
+
+    ev_type = evidence.type
+    ev_value = ev_type.value if hasattr(ev_type, "value") else str(ev_type)
+    if ev_value == EvidenceType.HUBSPOT_ACTIVITY.value:
+        meta: dict[str, Any] = {}
+        if evidence.metadata_json:
+            try:
+                loaded = json.loads(evidence.metadata_json)
+            except (TypeError, json.JSONDecodeError):
+                loaded = {}
+            if isinstance(loaded, dict):
+                meta = loaded
+        kind = str(meta.get("engagement_type") or "")
+        if kind == "tasks":
+            return str(meta.get("task_status") or "").upper() == "COMPLETED"
+        if kind == "meetings":
+            end = meta.get("end_at") or evidence.occurred_at
+            return bool(end) and str(end) <= now
+        return True
+    if ev_value in {
+        EvidenceType.EMAIL.value,
+        EvidenceType.ZOOM_TRANSCRIPT.value,
+    }:
+        return True
+    if ev_value == EvidenceType.CALENDLY_MEETING.value:
+        return bool(evidence.occurred_at) and evidence.occurred_at <= now
+    return False
 
 
 def run_extraction_for_pending_evidence(conn: sqlite3.Connection) -> None:

@@ -23,6 +23,15 @@ from connectors.errors import (
     ConnectorTransientError,
 )
 
+
+def load_builtin_connectors() -> None:
+    """Import concrete connectors so their factories register with BaseConnector.
+
+    Safe to call more than once. New sources add an import here (Excel, Calendly, …).
+    """
+    from connectors import hubspot as _hubspot  # noqa: F401
+
+
 __all__ = [
     "BaseConnector",
     "Connector",
@@ -36,6 +45,7 @@ __all__ = [
     "SaveStats",
     "SyncRunResult",
     "WriteResult",
+    "load_builtin_connectors",
     "register_connector",
     "registered_connectors",
 ]

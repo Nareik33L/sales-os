@@ -1,0 +1,20 @@
+{
+  "results": [
+    {
+      "id": "4001",
+      "properties": {
+        "hs_call_title": "Discovery call",
+        "hs_call_body": "Walked through the Xodo Sign workflow with Ada Example.",
+        "hs_call_direction": "OUTBOUND",
+        "hs_timestamp": "2026-09-05T08:00:00.000Z",
+        "hs_lastmodifieddate": "2026-09-05T08:30:00.000Z"
+      },
+      "associations": {
+        "deals": {
+          "results": [{ "id": "3001", "type": "call_to_deal" }]
+        }
+      },
+      "updatedAt": "2026-09-05T08:30:00.000Z"
+    }
+  ]
+}

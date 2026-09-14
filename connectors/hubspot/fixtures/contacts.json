@@ -1,0 +1,38 @@
+{
+  "results": [
+    {
+      "id": "2001",
+      "properties": {
+        "firstname": "Ada",
+        "lastname": "Example",
+        "email": "ada@acme-example.test",
+        "phone": "+44 20 0000 0001",
+        "jobtitle": "Champion",
+        "hs_lastmodifieddate": "2026-09-12T11:00:00.000Z"
+      },
+      "associations": {
+        "companies": {
+          "results": [{ "id": "1001", "type": "contact_to_company" }]
+        }
+      },
+      "updatedAt": "2026-09-12T11:00:00.000Z"
+    },
+    {
+      "id": "2002",
+      "properties": {
+        "firstname": "Ben",
+        "lastname": "Tester",
+        "email": "ben@beta-example.test",
+        "phone": "+44 20 0000 0002",
+        "jobtitle": "Buyer",
+        "hs_lastmodifieddate": "2026-09-11T10:00:00.000Z"
+      },
+      "associations": {
+        "companies": {
+          "results": [{ "id": "1002", "type": "contact_to_company" }]
+        }
+      },
+      "updatedAt": "2026-09-11T10:00:00.000Z"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "results": [
+    {
+      "id": "4002",
+      "properties": {
+        "hs_meeting_title": "Acme proposal review",
+        "hs_meeting_body": "Agenda: walk through pricing and next steps.",
+        "hs_meeting_start_time": "2026-09-14T09:30:00.000Z",
+        "hs_meeting_end_time": "2026-09-14T10:00:00.000Z",
+        "hs_timestamp": "2026-09-14T09:30:00.000Z",
+        "hs_lastmodifieddate": "2026-09-13T16:00:00.000Z"
+      },
+      "associations": {
+        "deals": {
+          "results": [{ "id": "3001", "type": "meeting_to_deal" }]
+        }
+      },
+      "updatedAt": "2026-09-13T16:00:00.000Z"
+    }
+  ]
+}

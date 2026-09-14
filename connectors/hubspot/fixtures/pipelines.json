@@ -1,0 +1,40 @@
+{
+  "results": [
+    {
+      "id": "default",
+      "label": "Sales Pipeline",
+      "stages": [
+        {
+          "id": "appointmentscheduled",
+          "label": "Appointment Scheduled",
+          "metadata": { "isClosed": "false", "probability": "0.2" }
+        },
+        {
+          "id": "qualifiedtobuy",
+          "label": "Qualified To Buy",
+          "metadata": { "isClosed": "false", "probability": "0.4" }
+        },
+        {
+          "id": "presentationscheduled",
+          "label": "Proposal",
+          "metadata": { "isClosed": "false", "probability": "0.6" }
+        },
+        {
+          "id": "decisionmakerboughtin",
+          "label": "Negotiation",
+          "metadata": { "isClosed": "false", "probability": "0.8" }
+        },
+        {
+          "id": "closedwon",
+          "label": "Closed Won",
+          "metadata": { "isClosed": "true", "probability": "1.0" }
+        },
+        {
+          "id": "closedlost",
+          "label": "Closed Lost",
+          "metadata": { "isClosed": "true", "probability": "0.0" }
+        }
+      ]
+    }
+  ]
+}
