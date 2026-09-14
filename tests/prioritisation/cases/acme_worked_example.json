@@ -1,0 +1,62 @@
+{
+  "name": "acme_worked_example",
+  "now": "2026-09-14T08:00:00Z",
+  "timezone": "Europe/London",
+  "is_strategic": false,
+  "deal": {
+    "id": "dl_acme_sign",
+    "external_id": "hs-acme-sign",
+    "source": "HUBSPOT",
+    "product": "XODO_SIGN",
+    "name": "Acme — Xodo Sign",
+    "company_name": "Acme",
+    "deal_value": 75000,
+    "currency": "GBP",
+    "deal_value_gbp": 75000,
+    "close_date": "2026-09-18",
+    "last_activity_at": "2026-09-05T08:00:00Z"
+  },
+  "memories": [
+    {
+      "type": "COMMITMENT",
+      "status": "ACTIVE",
+      "subject": "revised pricing",
+      "content": "Send revised pricing to Acme.",
+      "direction": "USER_TO_CUSTOMER",
+      "due_date": "2026-09-13",
+      "confidence": 0.85,
+      "valid_from": "2026-09-14T08:00:00Z",
+      "created_by": "rules"
+    }
+  ],
+  "meetings": [],
+  "actions": [
+    {
+      "id": "ac_acme_pricing",
+      "title": "Send revised pricing",
+      "type": "COMMITMENT",
+      "source": "memory",
+      "deal_id": "dl_acme_sign",
+      "due_date": "2026-09-13"
+    }
+  ],
+  "config": "default",
+  "expect": {
+    "score": 82.4,
+    "attention": "HIGH",
+    "action_score": 86.2,
+    "action_tier": 1,
+    "bullets": [
+      "£75k deal",
+      "Closing in 4 days",
+      "You owe: revised pricing (due yesterday)",
+      "No activity for 9 days"
+    ],
+    "bullets_include": ["£75k deal", "Closing in 4 days"],
+    "components": {
+      "deal_value": {"signal": 97.5, "contribution": 29.3},
+      "outstanding_commitment": {"signal": 100, "contribution": 15.0},
+      "meeting_proximity": {"signal": 0, "contribution": 0}
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "unknown_value_and_close",
+  "now": "2026-09-14T08:00:00Z",
+  "timezone": "Europe/London",
+  "deal": {
+    "external_id": "hs-gamma-unknown",
+    "source": "HUBSPOT",
+    "product": "XODO_SIGN",
+    "name": "Gamma — unknown fields",
+    "company_name": "Gamma",
+    "currency": "GBP"
+  },
+  "memories": [],
+  "meetings": [],
+  "config": "default",
+  "expect": {
+    "bullets_include": ["no value recorded", "no close date recorded", "no activity recorded"],
+    "components": {
+      "deal_value": {"signal": 0},
+      "close_urgency": {"signal": 20},
+      "stale_activity": {"signal": 70}
+    }
+  }
+}

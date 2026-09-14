@@ -1,0 +1,24 @@
+{
+  "name": "stale_but_far_cap",
+  "now": "2026-09-14T08:00:00Z",
+  "timezone": "Europe/London",
+  "deal": {
+    "external_id": "xl-delta-far",
+    "source": "EXCEL",
+    "product": "PRODUCT_B",
+    "name": "Delta — far close",
+    "company_name": "Delta",
+    "deal_value_gbp": 15000,
+    "currency": "GBP",
+    "close_date": "2026-12-20",
+    "last_activity_at": "2026-08-01T08:00:00Z"
+  },
+  "memories": [],
+  "meetings": [],
+  "config": "default",
+  "expect": {
+    "components": {
+      "stale_activity": {"signal": 50}
+    }
+  }
+}
