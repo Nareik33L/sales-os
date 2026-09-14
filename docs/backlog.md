@@ -20,7 +20,7 @@ Maintained by `salesos-lead`. One ticket per build-plan item (`docs/10-build-pla
 | ID | Item | Owner | Depends | Acceptance | Status |
 |---|---|---|---|---|---|
 | SOS-07 | Connector base + refresh orchestrator | connectors | 02 | `BaseConnector.run()` records `sync_runs`; exceptions never escape; `NOT_CONFIGURED` on missing env; orchestrator continues past failures | done |
-| SOS-08 | HubSpot connector | connectors | 07 | fixtures-based tests; deals/companies/contacts/engagements/tasks upserted; incremental cursor; `last_activity_at` recomputed; open tasks → `HUBSPOT_TASK` actions | review |
+| SOS-08 | HubSpot connector | connectors | 07 | fixtures-based tests; deals/companies/contacts/engagements/tasks upserted; incremental cursor; `last_activity_at` recomputed; open tasks → `HUBSPOT_TASK` actions | done |
 | SOS-09 | Prioritisation engine | core | 04, 05 | doc 03 fixture cases pass incl. Acme worked example (82.4 HIGH); breakdown stored; `explain()` bullets | todo |
 | SOS-10 | Today page v0 | ui | 08, 09 | AppTest: ordering `tier, pinned, score`; Why bullets; Complete/Snooze/↑/↓/Dismiss write `user_feedback`; refresh button with per-connector status; renders with HubSpot ⚠ | todo |
 | SOS-11 | Phase 2 release + manual test | qa | 10 | `salesos-release` checklist; `docs/manual-tests/phase-2.md` | todo |
