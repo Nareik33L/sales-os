@@ -1,0 +1,14 @@
+# Committed on purpose: contains no secrets. Pins the local-only posture (ADR-008).
+[server]
+address = "localhost"
+port = 8501
+headless = true
+enableCORS = false
+enableXsrfProtection = true
+maxUploadSize = 50
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "light"
