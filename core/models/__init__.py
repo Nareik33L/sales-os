@@ -3,6 +3,7 @@
 UI and connectors should call these functions rather than issuing raw SQL.
 """
 
+from core.models.action import assign_action_tier, load_action_tier_by_type, tier_for_action_type
 from core.models.common import is_ulid, new_ulid, utcnow
 from core.models.repos import (
     add_action_evidence,
@@ -177,6 +178,7 @@ __all__ = [
     "add_action_evidence",
     "add_audit_log_evidence",
     "add_memory_evidence",
+    "assign_action_tier",
     "get_action",
     "get_action_by_source_id",
     "get_ai_call",
@@ -225,8 +227,10 @@ __all__ = [
     "list_settings",
     "list_sync_runs",
     "list_user_feedback",
+    "load_action_tier_by_type",
     "new_ulid",
     "set_setting",
+    "tier_for_action_type",
     "upsert_action",
     "upsert_ai_call",
     "upsert_audit_log",
