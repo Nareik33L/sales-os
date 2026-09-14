@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "salesos/memory_candidate/v1",
+  "title": "Memory candidates extracted from one evidence item",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["items"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "subject", "content", "quote", "extraction_confidence"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["FACT", "COMMITMENT", "CUSTOMER_PREFERENCE", "OBJECTION", "BUYING_SIGNAL", "RELATIONSHIP", "DEAL_STATE", "NEXT_STEP", "RISK"]
+          },
+          "subject": { "type": "string", "maxLength": 80, "description": "Short label, e.g. 'Revised pricing'" },
+          "content": { "type": "string", "maxLength": 300, "description": "One or two sentences restating what the source says. No new facts." },
+          "direction": {
+            "type": ["string", "null"],
+            "enum": ["USER_TO_CUSTOMER", "CUSTOMER_TO_USER", "CUSTOMER_INTERNAL", "USER_INTERNAL", null],
+            "description": "Required for COMMITMENT and NEXT_STEP. Code may override from evidence direction."
+          },
+          "owner_label": { "type": ["string", "null"], "maxLength": 80, "description": "'me' or the person's name as it appears in the source" },
+          "due_text": { "type": ["string", "null"], "maxLength": 60, "description": "Date phrase exactly as written: 'tomorrow', 'Friday', 'end of month'" },
+          "quote": { "type": "string", "minLength": 8, "maxLength": 400, "description": "Verbatim span from the source that supports this item. Verified by code; items with unverifiable quotes are dropped." },
+          "is_inference": { "type": "boolean", "default": false, "description": "True if this is deduced rather than stated. Inferred items are capped at confidence 0.5." },
+          "extraction_confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "relation_to_existing": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "required": ["relation", "existing_subject"],
+            "properties": {
+              "relation": { "type": "string", "enum": ["FULFILS", "CONTRADICTS", "SUPERSEDES", "SUPPORTS"] },
+              "existing_subject": { "type": "string", "maxLength": 80, "description": "Subject of the earlier belief this refers to, from the provided list of active memories" }
+            }
+          },
+          "contact_name": { "type": ["string", "null"], "maxLength": 120 }
+        }
+      }
+    }
+  }
+}
