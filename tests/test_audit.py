@@ -6,7 +6,12 @@ no HubSpot or other connector is imported or called.
 
 from __future__ import annotations
 
+import ast
 import json
+import os
+import subprocess
+import sys
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -268,9 +273,46 @@ def test_set_writer_default_is_used(db, frozen_now):
 
 
 def test_audit_package_does_not_import_connectors():
-    import sys
+    """ADR-005: core.audit must not import connectors (direct or transitive).
 
-    import core.audit  # noqa: F401
+    Do not inspect this process's ``sys.modules`` — SOS-07 tests already load
+    ``connectors.*`` and would false-fail a polluted session.
+    """
+    repo = Path(__file__).resolve().parents[1]
+    audit_dir = repo / "core" / "audit"
+    leaked_direct: list[str] = []
+    for path in sorted(audit_dir.glob("*.py")):
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    if alias.name == "connectors" or alias.name.startswith("connectors."):
+                        leaked_direct.append(f"{path.name}: import {alias.name}")
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                if node.module == "connectors" or node.module.startswith("connectors."):
+                    leaked_direct.append(f"{path.name}: from {node.module}")
+    assert leaked_direct == []
 
-    leaked = [name for name in sys.modules if name == "connectors" or name.startswith("connectors.")]
-    assert leaked == []
+    script = (
+        "import sys, core.audit; "
+        "leaked = [n for n in sys.modules "
+        "if n == 'connectors' or n.startswith('connectors.')]; "
+        "sys.stderr.write(','.join(leaked)); "
+        "raise SystemExit(2 if leaked else 0)"
+    )
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.pathsep.join(
+        [str(repo), env["PYTHONPATH"]] if env.get("PYTHONPATH") else [str(repo)]
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", script],
+        cwd=repo,
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, (
+        "core.audit loaded connectors in a clean interpreter: "
+        f"{result.stderr or result.stdout}"
+    )
