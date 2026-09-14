@@ -1,0 +1,34 @@
+{
+  "results": [
+    {
+      "id": "1001",
+      "properties": {
+        "name": "Acme Ltd",
+        "domain": "acme-example.test",
+        "industry": "COMPUTER_SOFTWARE",
+        "hs_lastmodifieddate": "2026-09-12T10:00:00.000Z"
+      },
+      "updatedAt": "2026-09-12T10:00:00.000Z"
+    },
+    {
+      "id": "1002",
+      "properties": {
+        "name": "Beta Corp",
+        "domain": "beta-example.test",
+        "industry": "INFORMATION_TECHNOLOGY_AND_SERVICES",
+        "hs_lastmodifieddate": "2026-09-11T09:00:00.000Z"
+      },
+      "updatedAt": "2026-09-11T09:00:00.000Z"
+    },
+    {
+      "id": "1003",
+      "properties": {
+        "name": "Gamma Ltd",
+        "domain": "gamma-example.test",
+        "industry": "FINANCIAL_SERVICES",
+        "hs_lastmodifieddate": "2026-09-10T08:00:00.000Z"
+      },
+      "updatedAt": "2026-09-10T08:00:00.000Z"
+    }
+  ]
+}

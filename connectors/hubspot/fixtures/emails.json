@@ -1,0 +1,22 @@
+{
+  "results": [
+    {
+      "id": "4004",
+      "properties": {
+        "hs_email_subject": "Re: Beta Corp trial",
+        "hs_email_text": "Thanks, we will review the trial internally this week.",
+        "hs_email_direction": "INCOMING",
+        "hs_email_from_email": "ben@beta-example.test",
+        "hs_email_to_email": "sam.taylor@salesos-example.test",
+        "hs_timestamp": "2026-09-10T08:00:00.000Z",
+        "hs_lastmodifieddate": "2026-09-10T08:01:00.000Z"
+      },
+      "associations": {
+        "deals": {
+          "results": [{ "id": "3002", "type": "email_to_deal" }]
+        }
+      },
+      "updatedAt": "2026-09-10T08:01:00.000Z"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "results": [
+    {
+      "id": "4003",
+      "properties": {
+        "hs_note_body": "Ada Example said they are reviewing internally with procurement.",
+        "hs_timestamp": "2026-09-01T12:00:00.000Z",
+        "hs_lastmodifieddate": "2026-09-01T12:05:00.000Z"
+      },
+      "associations": {
+        "deals": {
+          "results": [{ "id": "3001", "type": "note_to_deal" }]
+        }
+      },
+      "updatedAt": "2026-09-01T12:05:00.000Z"
+    }
+  ]
+}
