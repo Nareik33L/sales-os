@@ -1,0 +1,8 @@
+# Classic ruff defaults (E4/E7/E9/F). Ruff 0.16 enables a much wider set
+# including E501 and Markdown; that would fail existing schema SQL strings.
+exclude = [".venv", "venv", ".git", "data", "*.md"]
+target-version = "py311"
+extend-include = ["*.py"]
+
+[lint]
+select = ["E4", "E7", "E9", "F"]

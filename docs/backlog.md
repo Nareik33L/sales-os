@@ -13,7 +13,7 @@ Maintained by `salesos-lead`. One ticket per build-plan item (`docs/10-build-pla
 | SOS-05 | Action model + tiering | core | 02 | tier from type via `priority_weights.yaml`; `(source, source_id)` upsert | todo |
 | SOS-06 | Audit / approval gate | core | 02 | `execute_approved` refuses without APPROVED row; audit rows for propose/approve/reject/execute/config_change | todo |
 | SOS-06b | Config loaders + logging + `--demo` seed | qa | 01 | typed loaders for all `config/*.yaml` with validation (weights sum 1.0); rotating log under `data/logs`; `run.py --demo` seeds fictional data | in-progress |
-| SOS-06c | CI workflow + conftest fixtures | qa | 01 | `.github/workflows/ci.yml` runs ruff, pytest, migrate, config validation; fixtures `db`, `seeded_db`, `frozen_now`, `fake_provider` | in-progress |
+| SOS-06c | CI workflow + conftest fixtures | qa | 01 | `.github/workflows/ci.yml` runs ruff, pytest, migrate, config validation; fixtures `db`, `seeded_db`, `frozen_now`, `fake_provider` | review |
 
 ## Phase 2 — Vertical slice (HubSpot → prioritisation → Today)
 

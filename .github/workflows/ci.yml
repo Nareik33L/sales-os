@@ -1,0 +1,45 @@
+# CI for Personal Sales OS. No secrets. Fail the job on any step failure.
+# Owned by salesos-qa-release-engineer (SOS-06c).
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: test (python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Ruff
+        run: ruff check .
+
+      - name: Pytest
+        run: pytest -q
+
+      - name: Migrate empty database
+        run: python run.py --migrate
+        env:
+          SALESOS_DB_PATH: ${{ runner.temp }}/salesos-empty.db
+
+      - name: Validate config YAML and prompt JSON schemas
+        run: |
+          python -c "import yaml,json,glob; [yaml.safe_load(open(f)) for f in glob.glob('config/*.yaml')]; [json.load(open(f)) for f in glob.glob('ai/prompts/schemas/*.json')]"
