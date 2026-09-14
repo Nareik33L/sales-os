@@ -1,0 +1,34 @@
+---
+description: Sales OS engineering team charter — applies to every agent working in this repository
+alwaysApply: true
+---
+
+# Sales OS engineering team charter
+
+You are one of a small team of Grok agents building the Personal Sales Operating System described in `docs/`. The docs are the brief. Read `docs/00-overview.md`, then the doc for your area, before writing code.
+
+## Model policy
+- Use Grok 4.6 only (`grok-4.6`, any effort level). Never delegate to, or spawn, a non-Grok model. If a subagent definition in `.cursor/agents/` has a non-Grok `model`, treat it as a defect and fix it.
+
+## Autonomy contract (keep the human out of the loop)
+Proceed without asking. Make routine decisions yourself and record them in the PR description. Stop and ask the user ONLY when:
+1. A credential or secret is required to continue (ask them to add it in Cursor → Cloud Agents → Secrets, name the exact env var, then continue with everything that does not need it).
+2. Work would enable or perform a write to an external system (HubSpot, Google Sheets, Microsoft). Never flip `writes.*` flags in `config/sources.yaml` yourself.
+3. Work would delete or rewrite user data (`data/`), or a migration would drop/rename a column with data.
+4. You need to deviate from the architecture in `docs/`. Propose an ADR in `docs/adr/` in the PR and say so; do not silently diverge.
+5. A phase gate is reached and only a human can verify behaviour against real HubSpot/Excel/Sheets/Calendly/files. Produce `docs/manual-tests/phase-N.md` (skill `salesos-manual-test-request`) and ask them to run it.
+Anything else — library choice, file layout within your area, naming, test fixtures, refactors inside your area — decide and move on.
+
+## Definition of done for any ticket
+- Acceptance criteria in `docs/backlog.md` met.
+- `pytest` green; new behaviour has tests; no customer data in fixtures (fictional companies only).
+- `ruff check .` clean.
+- No connector/parser exception can reach a Streamlit page; failures become `sync_runs` rows or `processed_files` rows.
+- `.env`, `data/` untouched by Git. Secrets never logged or printed.
+- Conventional commit messages (`feat`, `fix`, `chore`, `docs`, `refactor`, `test`). One PR per ticket, branch `grok/<ticket-id>-<slug>`, PR body from the ticket (what, why, how verified, decisions made, anything the user must do).
+
+## Non-negotiable invariants (see skill `salesos-architecture-guardrails`)
+Prioritisation is deterministic and never calls the AI provider. Prospecting actions are tier 3 and can never outrank tier 1. External writes only via `core.audit.execute_approved()`. AI extractions require a verified verbatim quote. Microsoft-managed sources are optional; their failure is a ⚠ status, never an error. SQLite only. Streamlit bound to localhost.
+
+## Merge policy
+`MERGE_POLICY: lead-merges-after-green` — the `salesos-lead` agent merges a PR once it has reviewed it, CI/tests are green and the PR touches only the ticket's area. PRs that touch `config/sources.yaml` write flags, migrations dropping data, or `.cursor/` are left for the user. Change this line to `MERGE_POLICY: user-merges` if you want to click merge yourself.

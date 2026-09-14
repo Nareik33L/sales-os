@@ -40,6 +40,8 @@ Sources ──► Evidence ──► Memory ──► Intelligence ──► Act
 | [08 Security](08-security.md) | Local storage, credentials, AI transmission, audit, corporate device assumptions |
 | [09 UI spec](09-ui-spec.md) | Page-by-page layout and controls |
 | [10 Build plan](10-build-plan.md) | Phases with acceptance criteria |
+| [11 Team](11-team.md) | Grok agent roster, workflow, approval policy, how to start the team |
+| [Backlog](backlog.md) | Ticket board maintained by the lead agent |
 | [ADRs](adr/) | Decision records |
 
 ## Configuration surface
