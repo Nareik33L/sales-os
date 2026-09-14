@@ -224,10 +224,10 @@ def run_extraction_for_pending_evidence(conn: sqlite3.Connection) -> None:
 
 
 def recompute_priorities(conn: sqlite3.Connection) -> None:
-    """Recompute deterministic priority scores after ingestion.
+    """Recompute deterministic priority scores after ingestion (SOS-09)."""
+    from core.prioritisation import recompute_all
 
-    TODO(salesos-core-engineer): SOS-09 prioritisation engine.
-    """
+    recompute_all(conn)
 
 
 def refresh(

@@ -1,0 +1,26 @@
+{
+  "name": "close_date_passed",
+  "now": "2026-09-14T08:00:00Z",
+  "timezone": "Europe/London",
+  "deal": {
+    "external_id": "hs-gamma-passed",
+    "source": "HUBSPOT",
+    "product": "XODO_SIGN",
+    "name": "Gamma — close passed",
+    "company_name": "Gamma",
+    "deal_value_gbp": 20000,
+    "currency": "GBP",
+    "close_date": "2026-09-12",
+    "last_activity_at": "2026-09-10T08:00:00Z"
+  },
+  "memories": [],
+  "meetings": [],
+  "config": "default",
+  "expect": {
+    "attention": "MEDIUM",
+    "bullets_include": ["Close date passed (12 Sep)"],
+    "components": {
+      "close_urgency": {"signal": 100}
+    }
+  }
+}

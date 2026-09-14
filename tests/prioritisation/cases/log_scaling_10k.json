@@ -1,0 +1,25 @@
+{
+  "name": "log_scaling_10k",
+  "now": "2026-09-14T08:00:00Z",
+  "timezone": "Europe/London",
+  "deal": {
+    "external_id": "hs-beta-10k",
+    "source": "HUBSPOT",
+    "product": "XODO_SIGN",
+    "name": "Beta Corp — small",
+    "company_name": "Beta Corp",
+    "deal_value_gbp": 10000,
+    "currency": "GBP",
+    "close_date": "2026-12-31",
+    "last_activity_at": "2026-09-14T08:00:00Z"
+  },
+  "memories": [],
+  "meetings": [],
+  "config": "default",
+  "expect": {
+    "score_between": [20, 50],
+    "components": {
+      "deal_value": {"signal": 80.0}
+    }
+  }
+}

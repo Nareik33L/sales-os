@@ -1,0 +1,41 @@
+{
+  "name": "boost_bound",
+  "now": "2026-09-14T08:00:00Z",
+  "timezone": "Europe/London",
+  "deal": {
+    "id": "dl_acme_boost",
+    "external_id": "hs-acme-boost",
+    "source": "HUBSPOT",
+    "product": "XODO_SIGN",
+    "name": "Acme — boosted",
+    "company_name": "Acme",
+    "deal_value": 75000,
+    "currency": "GBP",
+    "deal_value_gbp": 75000,
+    "close_date": "2026-09-18",
+    "last_activity_at": "2026-09-05T08:00:00Z",
+    "user_boost": 999
+  },
+  "memories": [
+    {
+      "type": "COMMITMENT",
+      "status": "ACTIVE",
+      "subject": "revised pricing",
+      "content": "Send revised pricing to Acme.",
+      "direction": "USER_TO_CUSTOMER",
+      "due_date": "2026-09-13",
+      "confidence": 0.85,
+      "valid_from": "2026-09-14T08:00:00Z",
+      "created_by": "rules"
+    }
+  ],
+  "meetings": [],
+  "config": "default",
+  "expect": {
+    "score": 106.4,
+    "components": {
+      "user_boost": {"contribution": 24}
+    },
+    "bullets_include": ["You marked this more important"]
+  }
+}

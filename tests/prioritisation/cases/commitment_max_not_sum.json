@@ -1,0 +1,62 @@
+{
+  "name": "commitment_max_not_sum",
+  "now": "2026-09-14T08:00:00Z",
+  "timezone": "Europe/London",
+  "deal": {
+    "external_id": "hs-acme-multi",
+    "source": "HUBSPOT",
+    "product": "XODO_SIGN",
+    "name": "Acme — several commitments",
+    "company_name": "Acme",
+    "deal_value_gbp": 5000,
+    "currency": "GBP",
+    "close_date": "2026-11-01",
+    "last_activity_at": "2026-09-14T08:00:00Z"
+  },
+  "memories": [
+    {
+      "type": "COMMITMENT",
+      "status": "ACTIVE",
+      "subject": "revised pricing",
+      "content": "Send pricing.",
+      "direction": "USER_TO_CUSTOMER",
+      "due_date": "2026-09-10",
+      "confidence": 0.8,
+      "valid_from": "2026-09-14T08:00:00Z",
+      "created_by": "rules"
+    },
+    {
+      "type": "COMMITMENT",
+      "status": "ACTIVE",
+      "subject": "security questionnaire",
+      "content": "Send the questionnaire.",
+      "direction": "USER_TO_CUSTOMER",
+      "due_date": "2026-09-11",
+      "confidence": 0.8,
+      "valid_from": "2026-09-14T08:00:00Z",
+      "created_by": "rules"
+    },
+    {
+      "type": "COMMITMENT",
+      "status": "ACTIVE",
+      "subject": "case study",
+      "content": "Share a case study.",
+      "direction": "USER_TO_CUSTOMER",
+      "due_date": "2026-09-12",
+      "confidence": 0.8,
+      "valid_from": "2026-09-14T08:00:00Z",
+      "created_by": "rules"
+    }
+  ],
+  "meetings": [],
+  "config": "default",
+  "expect": {
+    "components": {
+      "outstanding_commitment": {"signal": 100, "contribution": 15.0}
+    },
+    "bullets_include": [
+      "You owe: revised pricing (due 10 Sep)",
+      "You owe: security questionnaire (due 11 Sep)"
+    ]
+  }
+}
