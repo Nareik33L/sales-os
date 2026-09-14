@@ -1,0 +1,51 @@
+# Excel deal import — column mapping. See docs/05-connectors.md §Excel.
+# Nothing here is hard-coded in the connector. Edit to match the workbook.
+
+version: 1
+
+file:
+  # Preferred: a locally synced workbook (OneDrive/SharePoint sync client).
+  # Overridden by EXCEL_SYNCED_FILE_PATH if set. If neither is readable the
+  # connector falls back to the newest *.xlsx in data/inbox/excel/.
+  synced_path: null
+  drop_folder: data/inbox/excel
+  glob: "*.xlsx"
+  # The sync client can hold a lock on the file; the connector copies it to a
+  # temp location before opening. Set to false if copying is not desired.
+  copy_before_open: true
+
+product: PRODUCT_B                # deals imported from this workbook belong to this product (see sources.yaml)
+default_currency: GBP
+
+sheets:
+  - name: "Open Deals"
+    is_closed: false
+    header_row: 1                 # 1-based row containing headers
+  - name: "Closed Deals"
+    is_closed: true
+    header_row: 1
+    # Optional column whose value decides won/lost for closed rows.
+    won_column: "Outcome"
+    won_values: ["Won", "Closed Won"]
+
+# Internal field -> workbook column header (exact header text, case-insensitive).
+# Fields not present are left NULL; the connector warns once per missing column.
+columns:
+  name: "Deal"
+  company_name: "Company"
+  deal_value: "Value"
+  currency: null                  # null = use default_currency
+  stage: "Stage"
+  close_date: "Expected Close"
+  owner: "Owner"
+  last_activity_at: "Last Contact"
+  notes: "Notes"
+
+# Excel rows have no IDs. The stable key is built from these fields (normalised,
+# joined, hashed). If the workbook has an ID column, list only that column here.
+stable_key_columns: ["Company", "Deal"]
+
+parsing:
+  date_formats: ["%d/%m/%Y", "%Y-%m-%d", "%d-%b-%Y"]
+  value_strip_chars: "£$€, "
+  skip_rows_where_empty: ["Company"]

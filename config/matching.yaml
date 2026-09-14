@@ -1,0 +1,50 @@
+# Entity matching thresholds — see docs/06-entity-matching.md
+# The matcher is deterministic and rule-ordered. Each rule yields a confidence;
+# the best candidate is compared against these thresholds.
+
+version: 1
+
+thresholds:
+  auto_link: 0.90                  # link silently, record method + confidence on evidence
+  provisional_link: 0.60           # link, but open a review_item (CONFIRM) so the user can correct it
+  # below provisional_link: do not link; open a review_item (MATCH_*) with candidates
+
+rule_confidence:
+  external_id: 1.00                # HubSpot ids, Calendly event uris
+  user_confirmed_alias: 1.00
+  email_domain: 0.95               # non-freemail domain matches companies.primary_domain / DOMAIN alias
+  contact_email: 0.95
+  calendar_correlation: 0.85       # transcript time within window of a matched meeting + participant overlap
+  company_name_exact: 0.90         # normalised exact match
+  company_name_fuzzy_high: 0.75    # rapidfuzz token_set_ratio >= 92
+  company_name_fuzzy_mid: 0.55     # >= 85
+  contact_full_name: 0.70
+  memory_reference: 0.60           # content mentions a subject only known from one deal's memories
+
+company_name_normalisation:
+  lowercase: true
+  strip_suffixes: ["ltd", "limited", "llc", "inc", "inc.", "plc", "gmbh", "corp", "corporation", "co", "co.", "group", "holdings"]
+  strip_punctuation: true
+  collapse_whitespace: true
+
+freemail_domains:                  # never used to infer a company
+  - gmail.com
+  - googlemail.com
+  - outlook.com
+  - hotmail.com
+  - live.com
+  - yahoo.com
+  - yahoo.co.uk
+  - icloud.com
+  - me.com
+  - proton.me
+  - protonmail.com
+
+deal_disambiguation:
+  # When the company is known but has several deals:
+  prefer_open: true
+  product_hints:                   # words in the content that suggest a product
+    XODO_SIGN: ["xodo sign", "e-sign", "esign", "signature"]
+    PRODUCT_B: []
+  prefer_most_recent_activity: true
+  ask_if_top_two_within: 0.10      # if two candidates' confidences are this close, ask instead of guessing

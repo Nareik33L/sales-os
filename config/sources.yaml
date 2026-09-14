@@ -1,0 +1,97 @@
+# Source and product registry. Connector health, tiering and fallbacks are
+# declared here so the Inbox/Settings pages can render status without knowing
+# connector internals. See docs/05-connectors.md.
+
+version: 1
+
+products:
+  XODO_SIGN:
+    label: "Xodo Sign"
+    source_of_truth: HUBSPOT
+  PRODUCT_B:                       # rename to the real product name
+    label: "Product B"
+    source_of_truth: EXCEL
+
+# Static conversion rates used ONLY to rank deals in a single currency.
+# Not forecasting. Update occasionally by hand.
+currency:
+  base: GBP
+  rates_to_gbp:
+    GBP: 1.0
+    USD: 0.78
+    EUR: 0.85
+
+connectors:
+  hubspot:
+    tier: 1
+    label: "HubSpot"
+    mode: api                      # api | file | disabled
+    enabled: true
+    required_env: [HUBSPOT_ACCESS_TOKEN]
+    writes:
+      complete_task: false         # approval-gated; off until explicitly enabled
+    sync:
+      incremental: true
+      lookback_days_on_first_sync: 365
+      include_closed_deals_days: 90
+      engagements: [calls, meetings, notes, emails, tasks]
+  google_sheets:
+    tier: 1
+    label: "Google Sheets"
+    mode: api
+    enabled: true
+    required_env: [GOOGLE_SERVICE_ACCOUNT_FILE, GOOGLE_SHEETS_SPREADSHEET_ID]
+    fallback:
+      mode: file
+      drop_folder: data/inbox/prospecting
+      glob: "*.csv"
+    writes:
+      mark_done: false
+    row_key_columns: ["Sequence ID", "Company", "Contact", "Step"]
+  calendly:
+    tier: 1
+    label: "Calendly"
+    mode: api
+    enabled: true
+    required_env: [CALENDLY_ACCESS_TOKEN]
+    sync:
+      past_days: 14
+      future_days: 30
+  excel:
+    tier: 1
+    label: "Excel"
+    mode: file
+    enabled: true
+    mapping: config/excel_mapping.yaml
+  email_files:
+    tier: 1
+    label: "Emails"
+    mode: file
+    enabled: true
+    drop_folder: data/inbox/emails
+    extensions: [".msg", ".eml", ".txt", ".pdf"]
+    user_email_addresses: []       # your own addresses; used to decide INBOUND vs OUTBOUND and "my commitments"
+  transcripts:
+    tier: 1
+    label: "Zoom"
+    mode: file
+    enabled: true
+    drop_folder: data/inbox/transcripts
+    extensions: [".vtt", ".txt"]
+    user_speaker_names: []         # how you appear in Zoom transcripts, e.g. ["Sam Jones"]
+    match_to_meeting_window_minutes: 90
+  todo:
+    tier: 2
+    label: "To-Do"
+    mode: disabled                 # api | file | disabled — expected to stay disabled under tenant restrictions
+    enabled: false
+    required_env: [MS_GRAPH_CLIENT_ID, MS_GRAPH_TENANT_ID]
+    fallback:
+      mode: file
+      drop_folder: data/inbox/todo
+      glob: "*.csv"
+
+refresh:
+  morning_refresh_hour_local: 7    # if the app is opened after this hour and no run happened today, refresh all
+  connector_timeout_seconds: 60
+  continue_on_connector_failure: true

@@ -1,0 +1,56 @@
+# AI provider configuration — see docs/07-ai-boundaries.md
+# Provider selection comes from AI_PROVIDER in .env. This file controls WHAT the
+# AI is allowed to do and how its output is validated. Deterministic code owns
+# prioritisation, matching, and scoring regardless of these settings.
+
+version: 1
+
+# Tasks the provider may be asked to perform. Each has a JSON schema in
+# ai/prompts/schemas/ that the output MUST validate against.
+tasks:
+  extract_memory:
+    enabled: true
+    max_input_chars: 40000
+    require_quotes: true           # every extracted item must carry a verbatim quote found in the source
+    quote_match_min_ratio: 0.92    # fuzzy tolerance for transcript punctuation/whitespace differences
+    drop_items_without_verified_quote: true
+    max_items: 20
+  extract_actions:
+    enabled: true
+    require_quotes: true
+    max_items: 10
+  summarize:                        # short summary of a single evidence item
+    enabled: true
+    max_output_sentences: 3
+  generate_deal_summary:            # "Current situation" — built only from supplied memories + evidence
+    enabled: true
+    max_output_sentences: 5
+    require_citation_per_sentence: true   # sentences that cite no evidence/memory id are removed
+  answer_question:                  # Brain Q&A — phrases deterministic query results; may not add facts
+    enabled: true
+
+# What runs when AI_PROVIDER=none or the provider errors.
+fallback:
+  rules_extractor: true             # regex/date-phrase extractor, confidence-capped
+  rules_confidence_cap: 0.60
+  templated_summaries: true
+
+privacy:
+  log_every_call: true              # ai_calls table
+  redact_email_addresses: false     # env AI_REDACT_EMAIL_ADDRESSES overrides
+  never_send:
+    - deal_value                    # values are never included in prompts; they are structured data anyway
+    - phone_numbers
+  show_transmission_banner: true    # Settings/Inbox show "N calls today, M chars sent to <provider>"
+
+providers:
+  openai:
+    model: gpt-4o-mini
+    temperature: 0
+    response_format: json_schema
+    timeout_seconds: 60
+  local:                            # any OpenAI-compatible endpoint (Ollama, LM Studio, vLLM)
+    base_url_env: OPENAI_BASE_URL
+    model: llama3.1:8b
+    temperature: 0
+    timeout_seconds: 120
