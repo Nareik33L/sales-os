@@ -10,8 +10,8 @@ Maintained by `salesos-lead`. One ticket per build-plan item (`docs/10-build-pla
 | SOS-02 | Core data models + repositories | core | 01 | pydantic models for every table; `upsert_deal` returns diff and writes `deal_changes`; round-trip tests | done |
 | SOS-03 | Evidence model + dedupe | core | 02 | insert by `(source, source_id)` or `content_hash` is idempotent; FTS searchable | todo |
 | SOS-04 | Memory model + lifecycle rules | core | 03 | doc 04 §3–7 rules as tests: dedupe-key update, corroboration maths, FULFILS, single-active supersede, conflict → review_item, commitment → action; rules extractor with 0.60 cap | todo |
-| SOS-05 | Action model + tiering | core | 02 | tier from type via `priority_weights.yaml`; `(source, source_id)` upsert | review |
-| SOS-06 | Audit / approval gate | core | 02 | `execute_approved` refuses without APPROVED row; audit rows for propose/approve/reject/execute/config_change | todo |
+| SOS-05 | Action model + tiering | core | 02 | tier from type via `priority_weights.yaml`; `(source, source_id)` upsert | done |
+| SOS-06 | Audit / approval gate | core | 02 | `execute_approved` refuses without APPROVED row; audit rows for propose/approve/reject/execute/config_change | review |
 | SOS-06b | Config loaders + logging + `--demo` seed | qa | 01 | typed loaders for all `config/*.yaml` with validation (weights sum 1.0); rotating log under `data/logs`; `run.py --demo` seeds fictional data | done |
 | SOS-06c | CI workflow + conftest fixtures | qa | 01 | `.github/workflows/ci.yml` runs ruff, pytest, migrate, config validation; fixtures `db`, `seeded_db`, `frozen_now`, `fake_provider` | done |
 
@@ -19,7 +19,7 @@ Maintained by `salesos-lead`. One ticket per build-plan item (`docs/10-build-pla
 
 | ID | Item | Owner | Depends | Acceptance | Status |
 |---|---|---|---|---|---|
-| SOS-07 | Connector base + refresh orchestrator | connectors | 02 | `BaseConnector.run()` records `sync_runs`; exceptions never escape; `NOT_CONFIGURED` on missing env; orchestrator continues past failures | review |
+| SOS-07 | Connector base + refresh orchestrator | connectors | 02 | `BaseConnector.run()` records `sync_runs`; exceptions never escape; `NOT_CONFIGURED` on missing env; orchestrator continues past failures | done |
 | SOS-08 | HubSpot connector | connectors | 07 | fixtures-based tests; deals/companies/contacts/engagements/tasks upserted; incremental cursor; `last_activity_at` recomputed; open tasks → `HUBSPOT_TASK` actions | todo |
 | SOS-09 | Prioritisation engine | core | 04, 05 | doc 03 fixture cases pass incl. Acme worked example (82.4 HIGH); breakdown stored; `explain()` bullets | todo |
 | SOS-10 | Today page v0 | ui | 08, 09 | AppTest: ordering `tier, pinned, score`; Why bullets; Complete/Snooze/↑/↓/Dismiss write `user_feedback`; refresh button with per-connector status; renders with HubSpot ⚠ | todo |
