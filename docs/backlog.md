@@ -23,7 +23,7 @@ Maintained by `salesos-lead`. One ticket per build-plan item (`docs/10-build-pla
 | SOS-08 | HubSpot connector | connectors | 07 | fixtures-based tests; deals/companies/contacts/engagements/tasks upserted; incremental cursor; `last_activity_at` recomputed; open tasks → `HUBSPOT_TASK` actions | done |
 | SOS-09 | Prioritisation engine | core | 04, 05 | doc 03 fixture cases pass incl. Acme worked example (82.4 HIGH); breakdown stored; `explain()` bullets | done |
 | SOS-10 | Today page v0 | ui | 08, 09 | AppTest: ordering `tier, pinned, score`; Why bullets; Complete/Snooze/↑/↓/Dismiss write `user_feedback`; refresh button with per-connector status; renders with HubSpot ⚠ | done |
-| SOS-11 | Phase 2 release + manual test | qa | 10 | `salesos-release` checklist; `docs/manual-tests/phase-2.md` | review |
+| SOS-11 | Phase 2 release + manual test | qa | 10 | `salesos-release` checklist; `docs/manual-tests/phase-2.md` | done |
 
 ## Phase 3 — Structured sources + Deals pages
 
