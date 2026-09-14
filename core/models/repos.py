@@ -22,6 +22,7 @@ from core.models.common import (
     save,
     utcnow,
 )
+from core.models.evidence import ensure_content_hash, normalise_source_id
 from core.models.schemas import (
     DEAL_TRACKED_FIELDS,
     Action,
@@ -343,6 +344,14 @@ def get_evidence_by_source_id(
     )
 
 
+def get_evidence_by_content_hash(
+    conn: sqlite3.Connection, content_hash: str
+) -> Evidence | None:
+    return fetch_one(
+        conn, "evidence", Evidence, where={"content_hash": content_hash}
+    )
+
+
 def list_evidence(
     conn: sqlite3.Connection, *, deal_id: str | None = None, company_id: str | None = None
 ) -> list[Evidence]:
@@ -357,11 +366,28 @@ def list_evidence(
 def upsert_evidence(
     conn: sqlite3.Connection, evidence: Evidence, *, now: str | None = None
 ) -> Evidence:
+    """Insert evidence, or return the existing row on a dedupe hit.
+
+    * ``(source, source_id)`` — upsert (API-sourced identity).
+    * ``source_id`` absent/null — lookup by ``content_hash`` and no-op on match
+      (file-sourced identity, docs/04 §1).
+    * ``content_hash`` is computed as SHA-256 of ``content`` when omitted.
+    """
+    evidence = ensure_content_hash(evidence)
+    source_id = normalise_source_id(evidence.source_id)
+    if source_id != evidence.source_id:
+        evidence = evidence.model_copy(update={"source_id": source_id})
+
     existing = None
     if "id" in evidence.model_fields_set:
         existing = get_evidence(conn, evidence.id)
-    if existing is None and evidence.source_id is not None:
-        existing = get_evidence_by_source_id(conn, evidence.source, evidence.source_id)
+    if existing is None and source_id is not None:
+        existing = get_evidence_by_source_id(conn, evidence.source, source_id)
+    if existing is None and source_id is None and evidence.content_hash:
+        existing = get_evidence_by_content_hash(conn, evidence.content_hash)
+        if existing is not None:
+            return existing
+
     saved, _ = save(
         conn,
         "evidence",
