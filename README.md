@@ -27,10 +27,11 @@ python -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\a
 pip install -r requirements.txt
 cp .env.example .env                                   # fill in what you have; leave the rest blank
 python run.py --migrate                                # creates data/salesos.db
-pytest                                                 # schema tests
+python run.py --demo                                   # migrate + fictional seed (no UI)
+pytest                                                 # schema, config, logging, demo seed
 ```
 
-`python run.py` will launch the UI once `app/main.py` exists (Phase 2).
+Logs rotate under `data/logs/salesos.log` (level: `SALESOS_LOG_LEVEL`, default INFO). `python run.py` will launch the UI once `app/main.py` exists (Phase 2).
 
 ## Layout
 

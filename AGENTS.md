@@ -20,6 +20,7 @@ This repository is built by Grok 4.6 subagents defined in `.cursor/agents/` unde
 pip install -r requirements.txt
 ruff check . && pytest -q
 python run.py --migrate      # apply migrations
+python run.py --demo         # migrate + seed fictional data (does not start Streamlit)
 python run.py                # launch UI on http://localhost:8501
 ```
 
