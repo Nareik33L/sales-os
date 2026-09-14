@@ -29,3 +29,4 @@ msal>=1.30,<2
 # Dev / test
 pytest>=8.3,<10
 ruff>=0.5,<1
+freezegun>=1.5,<2
