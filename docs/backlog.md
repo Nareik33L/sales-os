@@ -9,7 +9,7 @@ Maintained by `salesos-lead`. One ticket per build-plan item (`docs/10-build-pla
 | SOS-01 | SQLite database + migration runner | core | — | `pytest tests/test_schema.py` green; `run.py --migrate` idempotent | done |
 | SOS-02 | Core data models + repositories | core | 01 | pydantic models for every table; `upsert_deal` returns diff and writes `deal_changes`; round-trip tests | done |
 | SOS-03 | Evidence model + dedupe | core | 02 | insert by `(source, source_id)` or `content_hash` is idempotent; FTS searchable | done |
-| SOS-04 | Memory model + lifecycle rules | core | 03 | doc 04 §3–7 rules as tests: dedupe-key update, corroboration maths, FULFILS, single-active supersede, conflict → review_item, commitment → action; rules extractor with 0.60 cap | review |
+| SOS-04 | Memory model + lifecycle rules | core | 03 | doc 04 §3–7 rules as tests: dedupe-key update, corroboration maths, FULFILS, single-active supersede, conflict → review_item, commitment → action; rules extractor with 0.60 cap | done |
 | SOS-05 | Action model + tiering | core | 02 | tier from type via `priority_weights.yaml`; `(source, source_id)` upsert | done |
 | SOS-06 | Audit / approval gate | core | 02 | `execute_approved` refuses without APPROVED row; audit rows for propose/approve/reject/execute/config_change | done |
 | SOS-06b | Config loaders + logging + `--demo` seed | qa | 01 | typed loaders for all `config/*.yaml` with validation (weights sum 1.0); rotating log under `data/logs`; `run.py --demo` seeds fictional data | done |
