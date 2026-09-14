@@ -6,7 +6,7 @@ Personal Sales Operating System — a local-first working layer over HubSpot, Ex
 
 ## Status
 
-**Architecture package + foundation.** The design is complete and reviewed (`docs/`), the database schema is executable and tested (`database/`), and configuration surfaces exist (`config/`). Connectors, prioritisation engine and UI are built next, in the order given in [docs/10-build-plan.md](docs/10-build-plan.md).
+**Phase 2 — 0.2.0.** HubSpot → deterministic prioritisation → Today. `python run.py` opens http://localhost:8501. Version in `VERSION`; history in [CHANGELOG.md](CHANGELOG.md). Next: Excel / Sheets / Calendly and the Deals pages ([docs/10-build-plan.md](docs/10-build-plan.md)).
 
 ## What it does (V1)
 
@@ -20,18 +20,18 @@ Personal Sales Operating System — a local-first working layer over HubSpot, Ex
 
 Start at [docs/00-overview.md](docs/00-overview.md). The Section 45 review with all decisions is [docs/01-architecture-review.md](docs/01-architecture-review.md). Decision records are in [docs/adr/](docs/adr/).
 
-## Quick start (foundation)
+## Quick start (Phase 2)
 
 ```bash
 python -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env                                   # fill in what you have; leave the rest blank
+cp .env.example .env                                   # HUBSPOT_ACCESS_TOKEN for live HubSpot; rest can stay blank
 python run.py --migrate                                # creates data/salesos.db
-python run.py --demo                                   # migrate + fictional seed (no UI)
-pytest                                                 # schema, config, logging, demo seed
+python run.py --demo                                   # fictional seed (Acme / Beta Corp); does not start the UI
+python run.py                                          # Today at http://localhost:8501
 ```
 
-Logs rotate under `data/logs/salesos.log` (level: `SALESOS_LOG_LEVEL`, default INFO). `python run.py` will launch the UI once `app/main.py` exists (Phase 2).
+Needs Python 3.11 or 3.12. Logs rotate under `data/logs/salesos.log`. Manual check after a pull: [docs/manual-tests/phase-2.md](docs/manual-tests/phase-2.md).
 
 ## Layout
 
@@ -44,7 +44,8 @@ database/     db.py + SQL migrations (the schema is the architecture artifact)
 config/       sources, priority weights, excel mapping, matching, ai — all editable YAML
 data/         inbox/ (drop files here), processed/, exports/ — gitignored, stays on this machine
 docs/         architecture package and ADRs
-tests/
+tests/        including tests/release/db_v0.2.0.sqlite (fictional)
+VERSION, CHANGELOG.md, run.py, requirements.txt
 ```
 
 ## Safety rules
