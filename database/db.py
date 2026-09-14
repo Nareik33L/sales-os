@@ -15,9 +15,9 @@ from __future__ import annotations
 import os
 import re
 import sqlite3
+from collections.abc import Iterable
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable
 
 MIGRATIONS_DIR = Path(__file__).parent / "migrations"
 _MIGRATION_NAME = re.compile(r"^(\d{3})_([a-z0-9_]+)\.sql$")
