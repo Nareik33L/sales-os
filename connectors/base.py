@@ -73,18 +73,15 @@ class FetchResult:
 
 @dataclass
 class NormalisedBatch:
-    """Internal rows awaiting SOS-02 pydantic models.
+    """Internal rows for `save()` — `core.models` instances or coercible dicts."""
 
-    Values are plain dicts until `salesos-core-engineer` ships `core.models`.
-    Do not invent full models here.
-    """
-
-    deals: list[dict[str, Any]] = field(default_factory=list)
-    companies: list[dict[str, Any]] = field(default_factory=list)
-    contacts: list[dict[str, Any]] = field(default_factory=list)
-    meetings: list[dict[str, Any]] = field(default_factory=list)
-    evidence: list[dict[str, Any]] = field(default_factory=list)
-    actions: list[dict[str, Any]] = field(default_factory=list)
+    deals: list[Any] = field(default_factory=list)
+    companies: list[Any] = field(default_factory=list)
+    contacts: list[Any] = field(default_factory=list)
+    meetings: list[Any] = field(default_factory=list)
+    evidence: list[Any] = field(default_factory=list)
+    actions: list[Any] = field(default_factory=list)
+    prospecting_items: list[Any] = field(default_factory=list)
     errors: list[dict[str, Any]] = field(default_factory=list)
 
     def record_count(self) -> int:
@@ -95,6 +92,7 @@ class NormalisedBatch:
             + len(self.meetings)
             + len(self.evidence)
             + len(self.actions)
+            + len(self.prospecting_items)
         )
 
 
@@ -237,13 +235,16 @@ class BaseConnector:
         conn: sqlite3.Connection,
         sync_run_id: str,
     ) -> SaveStats:
-        """Persist a normalised batch via core repositories.
+        """Persist a normalised batch via `core.models` upserts.
 
-        TODO(salesos-core-engineer): SOS-02 — replace this no-op with repository
-        upserts (`upsert_deal` etc.) that return created|changed|unchanged plus
-        field diffs written to `deal_changes`. Connectors must not embed SQL.
+        Deals use `upsert_deal(..., sync_run_id=)` so tracked-field diffs land
+        in `deal_changes`. Does not commit — `finish_run` owns the commit.
+        Never deletes; disappearing source rows simply stop advancing
+        `last_seen_at`.
         """
-        return SaveStats()
+        from core.ingestion.persist import save_normalised_batch
+
+        return save_normalised_batch(batch, conn, sync_run_id)
 
     def write(self, capability: str, payload: dict[str, Any], *, audit_id: str) -> WriteResult:
         """Approval-gated external write. Only reachable via `core.audit.execute_approved()`.

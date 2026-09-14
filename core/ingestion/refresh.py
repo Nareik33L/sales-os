@@ -129,7 +129,7 @@ def process_inbox_folders(conn: sqlite3.Connection) -> None:
 def recompute_activity_dates(conn: sqlite3.Connection) -> None:
     """Recompute `deals.last_activity_at` from engagements + local evidence.
 
-    TODO(salesos-core-engineer): SOS-02 activity aggregator.
+    TODO(salesos-connector-engineer): SOS-08 HubSpot recomputes this from engagements.
     """
 
 
